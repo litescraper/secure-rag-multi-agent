@@ -317,6 +317,29 @@ flowchart TD
     npm run dev  # http://localhost:3000
     ```
 
+### Optional Litescrape Web Search
+
+Set `LITESCRAPE_API_KEY` to enable the research agent's `webSearchTool`.
+The `litescrapeSearchTool` is also exported from
+`src/mastra/tools/litescrape-search.tool.ts` for direct Mastra registration.
+`LITESCRAPE_BASE_URL` defaults to `https://api.litescrape.com`
+and must omit `/api/google/search`.
+This is a first-party native integration, separate from the generic alternative.
+
+For a custom endpoint, explicitly approve its hostname in the comma-separated
+`LITESCRAPE_ALLOWED_HOSTS` setting. Only HTTPS origins on this operator-controlled
+whitelist are accepted; URL credentials, query strings, fragments and redirects
+are refused. Base URL and host approval are never tool arguments.
+`LITESCRAPE_TIMEOUT_MS` defaults to `60000` (invalid values use that default);
+set `90000` if an approved endpoint needs up to 90 seconds. Calls are spaced by
+at least one second. Requests above ten results are bounded to ten.
+
+Results contain `title`, `url` and `content`; `content` is the search snippet,
+not a fetched page (`contentType: 'snippet'`). Existing SerpAPI, Scholar, news,
+trends, finance, authentication and protected-vector access are unchanged.
+Without this provider's key, the agent's existing tool set is unchanged.
+The Kilocode header records this as a fork-only draft awaiting maintainer review.
+
 ### AI & Research Capabilities
 
 - **Multi-Agent Orchestration**: 20+ specialized agents for research, analysis, content creation, and security
